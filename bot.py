@@ -340,7 +340,7 @@ class Modmail(commands.Bot):
     async def process_modmail(self, message):
         '''Processes messages sent to the bot.'''
         try:
-            await message.add_reaction('✅')
+            await message.add_reaction('✔')
         except:
             pass
 
@@ -356,8 +356,8 @@ class Modmail(commands.Bot):
         if str(message.author.id) in blocked:
             return await message.author.send(embed=self.blocked_em)
 
-        em = discord.Embed(title='Thanks for the message!')
-        em.description = 'The moderation team will get back to you as soon as possible!'
+        em = discord.Embed(title='> BTK Support <')
+        em.description = 'Thank you for contact support , our team shall be here shortly to review your application , meanwhile if your application is in regards of applying for staff , or moderation circumstances please head straight over to our website you may find at https://league-of-btk.org/mod-mail-new??ganggang-no-login.html and choose your category. so keep in mind this bot is for discord server related circumstances only. any fraud or mis-use of the support system will result in serious consequences and may lead to a permanent ban from the btk and clanned servers on discord , as btk has a big partner , who may spread the word. any self botting towards the support system may cause a system failure so please do not enable your self bots. and always make sure to provide explaningfull information towards the support team.\n```\nSupport Team Online\n```\n :robot: **Case:** `N/A`'
         em.color = discord.Color.green()
 
         if channel is not None:
