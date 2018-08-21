@@ -125,7 +125,7 @@ class Modmail(commands.Bot):
         self.guild = discord.utils.get(self.guilds, id=self.guild_id)
         print(textwrap.dedent(f'''
         ---------------
-        Client is ready!
+        Client is ready
         ---------------
         Author: EmeraldAssasinYT#3558
         ---------------
@@ -169,7 +169,7 @@ class Modmail(commands.Bot):
         em.add_field(name='Commands', value=cmds)
         em.add_field(name='Warning', value=warn)
         em.add_field(name='Github', value='https://github.com/downfallpm')
-        em.set_footer(text='Star the repository to unlock hidden features!')
+        em.set_footer(text='Check out our Github!')
 
         return em
 
@@ -177,7 +177,7 @@ class Modmail(commands.Bot):
     @commands.has_permissions(administrator=True)
     async def setup(self, ctx, *, modrole: discord.Role=None):
         '''Sets up a server for modmail'''
-        if discord.utils.get(ctx.guild.categories, name='Support'):
+        if discord.utils.get(ctx.guild.categories, name='Mod Mail'):
             return await ctx.send('This server is already set up.')
 
         categ = await ctx.guild.create_category(
@@ -195,7 +195,7 @@ class Modmail(commands.Bot):
     @commands.has_permissions(administrator=True)
     async def disable(self, ctx):
         '''Close all threads and disable modmail.'''
-        categ = discord.utils.get(ctx.guild.categories, name='Support')
+        categ = discord.utils.get(ctx.guild.categories, name='Mod Mail')
         if not categ:
             return await ctx.send('This server is not set up.')
         for category, channels in ctx.guild.by_category():
@@ -348,7 +348,7 @@ class Modmail(commands.Bot):
         author = message.author
         topic = f'User ID: {author.id}'
         channel = discord.utils.get(guild.text_channels, topic=topic)
-        categ = discord.utils.get(guild.categories, name='Support')
+        categ = discord.utils.get(guild.categories, name='Mod Mail')
         top_chan = categ.channels[0] #bot-info
         blocked = top_chan.topic.split('Blocked\n-------')[1].strip().split('\n')
         blocked = [x.strip() for x in blocked]
@@ -407,7 +407,7 @@ class Modmail(commands.Bot):
             else:
                 return await ctx.send('No User ID provided.')
 
-        categ = discord.utils.get(ctx.guild.categories, name='Support')
+        categ = discord.utils.get(ctx.guild.categories, name='Mod Mail')
         top_chan = categ.channels[0] #bot-info
         topic = str(top_chan.topic)
         topic += id + '\n'
@@ -428,7 +428,7 @@ class Modmail(commands.Bot):
             else:
                 return await ctx.send('No User ID provided.')
 
-        categ = discord.utils.get(ctx.guild.categories, name='Support')
+        categ = discord.utils.get(ctx.guild.categories, name='Mod Mail')
         top_chan = categ.channels[0] #bot-info
         topic = str(top_chan.topic)
         topic = topic.replace(id+'\n', '')
