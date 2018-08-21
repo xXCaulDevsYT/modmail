@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 '''
 
-GUILD_ID = 441074979623141388 # your guild id here
+GUILD_ID = 481195186844860417 # your guild id here
 
 import discord
 from discord.ext import commands
@@ -127,7 +127,7 @@ class Modmail(commands.Bot):
         ---------------
         Client is ready!
         ---------------
-        Author: Kyb3r#7220
+        Author: EmeraldAssasinYT#3558
         ---------------
         Logged in as: {self.user}
         User ID: {self.user.id}
@@ -150,25 +150,25 @@ class Modmail(commands.Bot):
 
     def help_embed(self, prefix):
         em = discord.Embed(color=0x00FFFF)
-        em.set_author(name='Mod Mail - Help', icon_url=self.user.avatar_url)
-        em.description = 'This bot is a python implementation of a stateless "Mod Mail" bot. ' \
-                         'Made by Kyb3r and improved by the suggestions of others. This bot ' \
+        em.set_author(name='DownFall Support - Help', icon_url=self.user.avatar_url)
+        em.description = 'This bot is a python implementation of a stateless "Support" bot. ' \
+                         'Made by EmeraldAssasin and improved by the suggestions of others. This bot ' \
                          'saves no data and utilises channel topics for storage and syncing.' 
                  
 
         cmds = f'`{prefix}setup [modrole] <- (optional)` - Command that sets up the bot.\n' \
                f'`{prefix}reply <message...>` - Sends a message to the current thread\'s recipient.\n' \
                f'`{prefix}close` - Closes the current thread and deletes the channel.\n' \
-               f'`{prefix}disable` - Closes all threads and disables modmail for the server.\n' \
+               f'`{prefix}disable` - Closes all threads and disables support for the server.\n' \
                f'`{prefix}customstatus` - Sets the Bot status to whatever you want.' \
-               f'`{prefix}block` - Blocks a user from using modmail!' \
-               f'`{prefix}unblock` - Unblocks a user from using modmail!'
+               f'`{prefix}block` - Blocks a user from using support!' \
+               f'`{prefix}unblock` - Unblocks a user from using support!'
 
         warn = 'Do not manually delete the category or channels as it will break the system. ' \
                'Modifying the channel topic will also break the system.'
         em.add_field(name='Commands', value=cmds)
         em.add_field(name='Warning', value=warn)
-        em.add_field(name='Github', value='https://github.com/verixx/modmail')
+        em.add_field(name='Github', value='https://github.com/downfallpm')
         em.set_footer(text='Star the repository to unlock hidden features!')
 
         return em
@@ -177,7 +177,7 @@ class Modmail(commands.Bot):
     @commands.has_permissions(administrator=True)
     async def setup(self, ctx, *, modrole: discord.Role=None):
         '''Sets up a server for modmail'''
-        if discord.utils.get(ctx.guild.categories, name='Mod Mail'):
+        if discord.utils.get(ctx.guild.categories, name='Support'):
             return await ctx.send('This server is already set up.')
 
         categ = await ctx.guild.create_category(
@@ -185,7 +185,7 @@ class Modmail(commands.Bot):
             overwrites=self.overwrites(ctx, modrole=modrole)
             )
         await categ.edit(position=0)
-        c = await ctx.guild.create_text_channel(name='bot-info', category=categ)
+        c = await ctx.guild.create_text_channel(name='downfall-help', category=categ)
         await c.edit(topic='Manually add user id\'s to block users.\n\n'
                            'Blocked\n-------\n\n')
         await c.send(embed=self.help_embed(ctx.prefix))
@@ -195,7 +195,7 @@ class Modmail(commands.Bot):
     @commands.has_permissions(administrator=True)
     async def disable(self, ctx):
         '''Close all threads and disable modmail.'''
-        categ = discord.utils.get(ctx.guild.categories, name='Mod Mail')
+        categ = discord.utils.get(ctx.guild.categories, name='Support')
         if not categ:
             return await ctx.send('This server is not set up.')
         for category, channels in ctx.guild.by_category():
@@ -204,7 +204,7 @@ class Modmail(commands.Bot):
                     if 'User ID:' in str(chan.topic):
                         user_id = int(chan.topic.split(': ')[1])
                         user = self.get_user(user_id)
-                        await user.send(f'**{ctx.author}** has closed this modmail session.')
+                        await user.send(f'**{ctx.author}** has closed this support session.')
                     await chan.delete()
         await categ.delete()
         await ctx.send('Disabled modmail.')
@@ -215,11 +215,11 @@ class Modmail(commands.Bot):
     async def _close(self, ctx):
         '''Close the current thread.'''
         if 'User ID:' not in str(ctx.channel.topic):
-            return await ctx.send('This is not a modmail thread.')
+            return await ctx.send('This is not a support thread.')
         user_id = int(ctx.channel.topic.split(': ')[1])
         user = self.get_user(user_id)
         em = discord.Embed(title='Thread Closed')
-        em.description = f'**{ctx.author}** has closed this modmail session.'
+        em.description = f'**{ctx.author}** has closed this support session.'
         em.color = discord.Color.red()
         try:
             await user.send(embed=em)
@@ -250,7 +250,7 @@ class Modmail(commands.Bot):
         member = self.guild.get_member(user.id)
         avi = user.avatar_url
         time = datetime.datetime.utcnow()
-        desc = 'Modmail thread started.'
+        desc = 'Support thread started.'
         color = 0
 
         if member:
@@ -334,7 +334,7 @@ class Modmail(commands.Bot):
     @property
     def blocked_em(self):
         em = discord.Embed(title='Message not sent!', color=discord.Color.red())
-        em.description = 'You have been blocked from using modmail.'
+        em.description = 'You have been blocked from using support.'
         return em
 
     async def process_modmail(self, message):
@@ -348,7 +348,7 @@ class Modmail(commands.Bot):
         author = message.author
         topic = f'User ID: {author.id}'
         channel = discord.utils.get(guild.text_channels, topic=topic)
-        categ = discord.utils.get(guild.categories, name='Mod Mail')
+        categ = discord.utils.get(guild.categories, name='Support')
         top_chan = categ.channels[0] #bot-info
         blocked = top_chan.topic.split('Blocked\n-------')[1].strip().split('\n')
         blocked = [x.strip() for x in blocked]
@@ -356,8 +356,8 @@ class Modmail(commands.Bot):
         if str(message.author.id) in blocked:
             return await message.author.send(embed=self.blocked_em)
 
-        em = discord.Embed(title='> BTK Support <')
-        em.description = 'Thank you for contact support , our team shall be here shortly to review your application , meanwhile if your application is in regards of applying for staff , or moderation circumstances please head straight over to our website you may find at https://league-of-btk.org/mod-mail-new??ganggang-no-login.html and choose your category. so keep in mind this bot is for discord server related circumstances only. any fraud or mis-use of the support system will result in serious consequences and may lead to a permanent ban from the btk and clanned servers on discord , as btk has a big partner , who may spread the word. any self botting towards the support system may cause a system failure so please do not enable your self bots. and always make sure to provide explaningfull information towards the support team.\n```\nSupport Team Online\n```\n :robot: **Case:** `N/A`'
+        em = discord.Embed(title='DownFallPM Support')
+        em.description = 'Thank you for contacting , DownFall PM Support , We should arrive to assist you soon. If you need help with a code send the code here. If you need physical help this isnt the place!'
         em.color = discord.Color.green()
 
         if channel is not None:
@@ -407,7 +407,7 @@ class Modmail(commands.Bot):
             else:
                 return await ctx.send('No User ID provided.')
 
-        categ = discord.utils.get(ctx.guild.categories, name='Mod Mail')
+        categ = discord.utils.get(ctx.guild.categories, name='Support')
         top_chan = categ.channels[0] #bot-info
         topic = str(top_chan.topic)
         topic += id + '\n'
@@ -428,7 +428,7 @@ class Modmail(commands.Bot):
             else:
                 return await ctx.send('No User ID provided.')
 
-        categ = discord.utils.get(ctx.guild.categories, name='Mod Mail')
+        categ = discord.utils.get(ctx.guild.categories, name='Support')
         top_chan = categ.channels[0] #bot-info
         topic = str(top_chan.topic)
         topic = topic.replace(id+'\n', '')
